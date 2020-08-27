@@ -1,0 +1,8 @@
+.inbox__container {
+    display: grid;
+    justify-content: center;
+}
+
+.ma {
+    margin-top: 1rem;
+}

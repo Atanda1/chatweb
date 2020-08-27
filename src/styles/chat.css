@@ -1,0 +1,12 @@
+.chat__container{
+    display: grid;
+    justify-content: center;
+}
+
+.image__container {
+    width: 400px;
+}
+
+img {
+    max-width: 100%;
+}
