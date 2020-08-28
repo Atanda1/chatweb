@@ -1,4 +1,5 @@
 .chat__container{
+    color: white;
     display: grid;
     justify-content: center;
 }
