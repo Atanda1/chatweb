@@ -36,7 +36,7 @@ class SignIn extends Component {
 
   render() {
     return (
-      <div className="chat__container">
+      <div>
         <section>
           <span></span>
             

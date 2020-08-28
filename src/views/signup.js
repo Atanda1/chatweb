@@ -36,7 +36,7 @@ import { signup } from "../helpers/auth";
 
   render() {
     return (
-      <div className="chat__container">
+      <div >
         {/* <form onSubmit={this.handleSubmit}>
           <h1>
             Sign Up to

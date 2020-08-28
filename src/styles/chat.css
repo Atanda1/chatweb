@@ -2,6 +2,13 @@
     color: white;
     display: grid;
     justify-content: center;
+    grid-template-columns: 40% 60%;
+    grid-gap: 6rem;
+    margin: 7rem 30rem;
+}
+
+.contact__list {
+    position: sticky;
 }
 
 .image__container {

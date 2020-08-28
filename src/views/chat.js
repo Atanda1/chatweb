@@ -4,6 +4,7 @@ import { db, storage } from "../services/firebase"
 import '../styles/chat.css'
 import {logout} from '../helpers/auth'
 import { Link } from "react-router-dom";
+import ContactList from '../component/contactList'
 
 class Chat extends Component {
 
@@ -79,7 +80,7 @@ class Chat extends Component {
             email: this.state.user.email,
             timestamp: Date.now(),
             uid: this.state.user.uid,
-            image: image,
+            image: image
            // posterId: localStorage.getItem('uid')
         })
       })
@@ -100,8 +101,12 @@ class Chat extends Component {
     }
     render() {
         return this.state.chats.length < 1 ? (<div>Your messages are loading</div>) :(
-            <div>
             <div className="chat__container">
+              <div className="contact__list">
+                <h3>Contacts</h3>
+                <ContactList/>
+              </div>
+              <div>
               <div className="chats">
                 {this.state.chats.map(chat => {
                   return ( 
@@ -126,14 +131,15 @@ class Chat extends Component {
                 <button type="submit">Send</button>
               </form>
               <div>
-                Signed in as: <strong>{this.state.user.email}</strong>
+                Signed in as: <strong>{this.state.user.email}</strong><br/>
                 <Link to="/inbox">
                   Check your inbox
                 </Link>
                 <button onClick={logout}>LogOut</button>
               </div>
               </div>
-            </div>
+              </div>
+          
           );
     }
 }
