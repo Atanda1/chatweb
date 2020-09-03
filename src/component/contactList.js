@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {db} from '../services/firebase'
+import '../styles/inbox.css'
 
 export class ContactList extends Component {
 
@@ -26,9 +27,9 @@ export class ContactList extends Component {
     }
     render() {
         return (
-            <div>
-                 {this.state.users.map(user => <h4 key={user.email} value={user.email}>{user.email}</h4>)}
-            </div>
+          <div>          
+            {this.state.users.map(user => <div className="contact__mail"><h4 key={user.email} value={user.email}>{user.email}</h4></div>)}        
+          </div>
         )
     }
 }

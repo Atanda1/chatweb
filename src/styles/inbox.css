@@ -6,3 +6,8 @@
 .ma {
     margin-top: 1rem;
 }
+
+.contact__mail {
+    border-width: .2px solid grey;
+
+}

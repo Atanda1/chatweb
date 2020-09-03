@@ -106,11 +106,11 @@ class Chat extends Component {
                 <h3>Contacts</h3>
                 <ContactList/>
               </div>
-              <div>
+              <div className="messages">
               <div className="chats">
                 {this.state.chats.map(chat => {
                   return ( 
-                  <div  key={chat.timestamp}>
+                  <div className="indi__message" key={chat.timestamp}>
                     <div className='image__container'>{chat.image ? <img src={chat.image}/> : null}</div>
                     <p>
                       {chat.content}<h5><i>{chat.email}</i> {this.formatTime(chat.timestamp)}</h5>
@@ -119,16 +119,18 @@ class Chat extends Component {
                 })}
               </div>
               <form onSubmit={this.handleSubmit}>
-                <input type="file" onChange={this.fileChangedHandler}></input>
-                <input 
-                    onChange={this.handleChange} 
-                    value={this.state.content}>
-                </input>
-                {this.state.error ? 
-                    <p>{this.state.writeError}</p> 
-                    : null}
-                
-                <button type="submit">Send</button>
+                <div className="bottom__item">
+                  <div><input 
+                      onChange={this.handleChange} 
+                      value={this.state.content}>
+                  </input>
+                  {this.state.error ? 
+                      <p>{this.state.writeError}</p> 
+                      : null}
+                  </div>
+                  <div><input type="file" onChange={this.fileChangedHandler}></input></div>
+                  <button className="btn__send" type="submit">Send</button>
+                </div>
               </form>
               <div>
                 Signed in as: <strong>{this.state.user.email}</strong><br/>

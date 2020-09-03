@@ -2,9 +2,10 @@
     color: white;
     display: grid;
     justify-content: center;
-    grid-template-columns: 40% 60%;
-    grid-gap: 6rem;
-    margin: 7rem 30rem;
+    grid-template-columns: 2fr 5fr;
+    grid-gap: 3rem;
+    margin: 3rem 10rem;
+    height : 85vh;
 }
 
 .contact__list {
@@ -12,9 +13,46 @@
 }
 
 .image__container {
-    width: 400px;
+    width: 20rem;
 }
 
 img {
     max-width: 100%;
 }
+.chats {
+    height : 85vh;
+    overflow-y : scroll;
+    background-image: url('https://fsb.zobj.net/crop.php?r=a0uD2sHFQucHt9mFajx0P7Mxp-e3yfz5ROUg-JKHMP9i7PrdiiOQV0jxU8ogGP6g37LrpT7Zh2EvQs7nD-x07coKNQPLa1XJ1hZ0TOft0W2SsKaOfurzWG-dLNgb-OtySvzjf3ut2wS7GkEJ');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.indi__message {
+    background-color: teal;
+    min-width: min-content;
+    max-width: 6rem;
+    padding: .3rem .5rem .7rem .5rem;
+    margin: .4rem;
+    height: min-content;
+}
+
+.bottom__item {
+    margin-top: .5rem;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 6fr 2fr 2fr;
+}
+
+.btn__send {
+    background:  #128C7E;
+}
+
+ 
+/* .btn__send:hover {
+    background: #03150f;
+  } */
+
+  .contact__list {
+      border: .5px solid grey;
+      height: 85vh;
+  }
