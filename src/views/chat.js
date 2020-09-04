@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { auth } from "../services/firebase";
-import { db, storage } from "../services/firebase"
+import { db, storage, dbf } from "../services/firebase"
 import '../styles/chat.css'
 import {logout} from '../helpers/auth'
 import { Link } from "react-router-dom";
-import ContactList from '../component/contactList'
+// import ContactList from '../component/contactList'
 
 class Chat extends Component {
 
@@ -13,7 +13,9 @@ class Chat extends Component {
         this.state = {
           user: auth().currentUser,
           chats: [],
+          users: [],
           content: '',
+          receiver: 'atandadave@gmail.com',
           readError: null,
           writeError: null,
           selectedFile: null
@@ -24,7 +26,7 @@ class Chat extends Component {
       async componentDidMount() {
         this.setState({ readError: null });
         try {
-          db.ref("chats").on("value", snapshot => {
+          db.ref('chats').orderByChild("email" ).equalTo(this.state.receiver).on("value", snapshot => {
             let chats = [];
             snapshot.forEach((snap) => {
               chats.push(snap.val());
@@ -33,6 +35,7 @@ class Chat extends Component {
           });
         } catch (error) {
           this.setState({ readError: error.message });
+          console.log(error.message)
         }
       }
 
@@ -41,10 +44,17 @@ class Chat extends Component {
           content: event.target.value
         });
       }
-
+      switchChat = e =>{
+        this.setState({
+          receiver: e.target.value
+        });
+        
+      }
       fileChangedHandler = event => {
         this.setState({ selectedFile: event.target.files[0] })
       }
+
+      
       logout (e) {
         logout(e)
       }
@@ -56,6 +66,7 @@ class Chat extends Component {
           db.ref("chats").push({
                    content: this.state.content,
                    email: this.state.user.email,
+                   receiver: this.state.receiver,
                    timestamp: Date.now(),
                    uid: this.state.user.uid
                  }).then(() => {
@@ -93,6 +104,7 @@ class Chat extends Component {
          });          
         } 
        }
+    
       
     formatTime(timestamp) {
       const d = new Date(timestamp);
@@ -104,9 +116,17 @@ class Chat extends Component {
             <div className="chat__container">
               <div className="contact__list">
                 <h3>Contacts</h3>
-                <ContactList/>
+                {/* <div>          
+                  {this.state.users.map(user => <div className="contact__mail"><h4 onClick={this.selectContact} id={user.email} key={user.email} value={user.email}>{user.email}</h4></div>)}        
+              </div> */}
+                {/* <select name="fruit" multiple onChange={this.switchChat} value={this.state.value}>
+                {this.state.users.map(user => <option key={user.email} value={user.email}>{user.email}</option>)}
+                </select> */}
+                <input value={this.state.receiver} onChange={this.switchChat}/>
+                <div className="name"><h3>{this.state.receiver}</h3></div>
               </div>
               <div className="messages">
+             
               <div className="chats">
                 {this.state.chats.map(chat => {
                   return ( 

@@ -3,7 +3,7 @@
     display: grid;
     justify-content: center;
     grid-template-columns: 2fr 5fr;
-    grid-gap: 3rem;
+    /* grid-gap: 3rem; */
     margin: 3rem 10rem;
     height : 85vh;
 }
@@ -19,6 +19,7 @@
 img {
     max-width: 100%;
 }
+
 .chats {
     height : 85vh;
     overflow-y : scroll;
