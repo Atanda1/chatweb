@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { auth } from "../services/firebase";
-import { db, storage, dbf } from "../services/firebase"
+import {  storage, dbf } from "../services/firebase"
 import '../styles/chat.css'
 import {logout} from '../helpers/auth'
 import { Link } from "react-router-dom";
@@ -205,7 +205,7 @@ class Chat extends Component {
                 {this.state.chats.map(chat => {
                   return ( 
                   <div className="indi__message" key={chat.timestamp}>
-                    <div className='image__container'>{chat.image ? <img src={chat.image}/> : null}</div>
+                    <div className='image__container'>{chat.image ? <img alt={chat.uid} src={chat.image}/> : null}</div>
                     <p>
                       {chat.message}<h5><i>{chat.sender}</i> {this.formatTime(chat.timestamp)}</h5>
                     </p>       
