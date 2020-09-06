@@ -25,6 +25,8 @@ export class Messages extends Component {
                         message.push(doc.data())
                         this.setState({ message })
                     });})
+
+                    
             } catch (error) {
               this.setState({ readError: error.message });
             }

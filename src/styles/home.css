@@ -43,13 +43,13 @@ section {
   
   button {
     width: 100%;
-    height: 35px;
+    height: 2.01rem;
     border: none;
     background: #03150f;
     color: #ecf0f1;
     font-weight: 100;
-    margin-bottom: 15px;
-    border-radius: 20px;
+    margin-bottom: .9rem;
+    border-radius: 1.4rem;
   }
   
   button:focus {

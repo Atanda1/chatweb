@@ -37,6 +37,15 @@ img {
     height: min-content;
 }
 
+.indi__message__sent {
+    background-color: rgb(26, 34, 34);
+    min-width: min-content;
+    max-width: 6rem;
+    padding: .3rem .5rem .7rem .5rem;
+    margin: .4rem;
+    height: min-content;
+}
+
 .bottom__item {
     margin-top: .5rem;
     display: grid;
@@ -54,6 +63,22 @@ img {
   } */
 
   .contact__list {
+      padding: 1rem;
       border: .5px solid grey;
       height: 85vh;
+  }
+
+  .chat__button {
+    width: 50%;
+    height: 2.01rem;
+    border: none;
+    background: #128C7E;
+    color: #ecf0f1;
+    font-weight: 100;
+    margin-bottom: 15px;
+    border-radius: 20px;
+  }
+
+  .chat__input {
+    width: 80%;
   }

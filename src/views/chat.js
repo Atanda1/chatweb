@@ -13,32 +13,106 @@ class Chat extends Component {
         this.state = {
           user: auth().currentUser,
           chats: [],
+          sentChat: [],
           users: [],
           content: '',
-          receiver: 'atandadave@gmail.com',
+          receiver: 'anu@gmail.com',
           readError: null,
           writeError: null,
           selectedFile: null
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.theRef = React.createRef();
       }
+      // async componentDidMount() {
+      //   this.setState({ readError: null });
+      //   try {
+      //     db.ref('chats').orderByChild("email").equalTo(this.state.receiver).on("value", snapshot => {
+      //       let chats = [];
+      //       snapshot.forEach((snap) => {
+      //         chats.push(snap.val());
+      //       });
+      //       this.setState({ chats });
+      //     });
+      //   } catch (error) {
+      //     this.setState({ readError: error.message });
+      //     console.log(error.message)
+      //   }
+      // }
+
       async componentDidMount() {
         this.setState({ readError: null });
+        
         try {
-          db.ref('chats').orderByChild("email" ).equalTo(this.state.receiver).on("value", snapshot => {
-            let chats = [];
-            snapshot.forEach((snap) => {
-              chats.push(snap.val());
-            });
-            this.setState({ chats });
-          });
+          dbf.collection("inbox").where("receiver", "==", this.state.user.email).where("sender", "==", this.state.receiver)
+          .onSnapshot(querySnapshot=> {
+              const chats = []
+              querySnapshot.forEach(doc => {
+                  // doc.data() is never undefined for query doc snapshots
+                  console.log(doc.id, " => ", doc.data());
+                  chats.push(doc.data())
+
+                  this.setState({ chats })
+              });})
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
+
+     
+        try {
+          dbf.collection("inbox").where("sender", "==", this.state.user.email).where("receiver", "==", this.state.receiver)
+      .onSnapshot(querySnapshot=> {
+          let sentChat = []
+          querySnapshot.forEach(doc => {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+              sentChat.push(doc.data())
+              this.setState({ sentChat })
+          });}) 
+
         } catch (error) {
           this.setState({ readError: error.message });
-          console.log(error.message)
         }
       }
 
+      
+
+     async componentDidUpdate (prevProps, prevState) {
+        if(prevState.receiver !== this.state.receiver) {
+          this.setState({ chats : [] });
+       
+          try {
+            dbf.collection("inbox").where("receiver", "==", this.state.user.email).where("sender", "==", this.state.receiver)
+            .onSnapshot(querySnapshot=> {
+                const chats = []
+                querySnapshot.forEach(doc => {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    chats.push(doc.data())
+                    this.setState({ chats })
+                });})
+        } catch (error) {
+          this.setState({ readError: error.message });
+        }
+
+        this.setState({ sentChat: [] });
+          try {
+            dbf.collection("inbox").where("sender", "==", this.state.user.email).where("receiver", "==", this.state.receiver)
+        .onSnapshot(querySnapshot=> {
+            let sentChat = []
+            querySnapshot.forEach(doc => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                sentChat.push(doc.data())
+                this.setState({ sentChat })
+            });}) 
+
+          } catch (error) {
+            this.setState({ readError: error.message });
+          }
+        }
+      }
       handleChange(event) {
         this.setState({
           content: event.target.value
@@ -46,9 +120,8 @@ class Chat extends Component {
       }
       switchChat = e =>{
         this.setState({
-          receiver: e.target.value
+          receiver: this.theRef.current.value
         });
-        
       }
       fileChangedHandler = event => {
         this.setState({ selectedFile: event.target.files[0] })
@@ -63,9 +136,9 @@ class Chat extends Component {
         const file = this.state.selectedFile;
         this.setState({ writeError: null });
         if( file === null ) {
-          db.ref("chats").push({
-                   content: this.state.content,
-                   email: this.state.user.email,
+          dbf.collection("inbox").add({
+                   message: this.state.content,
+                   sender: this.state.user.email,
                    receiver: this.state.receiver,
                    timestamp: Date.now(),
                    uid: this.state.user.uid
@@ -85,14 +158,14 @@ class Chat extends Component {
           .then(snapshot => snapshot.ref.getDownloadURL())
           .then(url => {
             console.log(url);
-           const image = url;
-           db.ref("chats").push({
-            content: this.state.content,
-            email: this.state.user.email,
-            timestamp: Date.now(),
-            uid: this.state.user.uid,
-            image: image
-           // posterId: localStorage.getItem('uid')
+         //  const url = url;
+           dbf.collection("inbox").add({
+              message: this.state.content,
+              sender: this.state.user.email,
+              receiver: this.state.receiver,
+              timestamp: Date.now(),
+              uid: this.state.user.uid,
+              image: url
         })
       })
            //save picture of image
@@ -112,7 +185,7 @@ class Chat extends Component {
       return time;
     }
     render() {
-        return this.state.chats.length < 1 ? (<div>Your messages are loading</div>) :(
+        return (
             <div className="chat__container">
               <div className="contact__list">
                 <h3>Contacts</h3>
@@ -122,7 +195,8 @@ class Chat extends Component {
                 {/* <select name="fruit" multiple onChange={this.switchChat} value={this.state.value}>
                 {this.state.users.map(user => <option key={user.email} value={user.email}>{user.email}</option>)}
                 </select> */}
-                <input value={this.state.receiver} onChange={this.switchChat}/>
+                <input className="chat__input" ref={this.theRef} />
+                <button className="chat__button" onClick={this.switchChat}>Chat</button>
                 <div className="name"><h3>{this.state.receiver}</h3></div>
               </div>
               <div className="messages">
@@ -133,10 +207,22 @@ class Chat extends Component {
                   <div className="indi__message" key={chat.timestamp}>
                     <div className='image__container'>{chat.image ? <img src={chat.image}/> : null}</div>
                     <p>
-                      {chat.content}<h5><i>{chat.email}</i> {this.formatTime(chat.timestamp)}</h5>
+                      {chat.message}<h5><i>{chat.sender}</i> {this.formatTime(chat.timestamp)}</h5>
                     </p>       
                    </div> )
-                })}
+                })
+                }
+                {
+                  this.state.sentChat.map(chat => {
+                    return ( 
+                    <div className="indi__message__sent" key={chat.timestamp}>
+                      <div className='image__container'>{chat.image ? <img src={chat.image}/> : null}</div>
+                      <p>
+                        {chat.message}<h5><i>{chat.sender}</i> {this.formatTime(chat.timestamp)}</h5>
+                      </p>       
+                     </div> )
+                  })
+                }
               </div>
               <form onSubmit={this.handleSubmit}>
                 <div className="bottom__item">
