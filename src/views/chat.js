@@ -240,9 +240,9 @@ class Chat extends Component {
               </form>
               <div>
                 Signed in as: <strong>{this.state.user.email}</strong><br/>
-                <Link to="/inbox">
+                {/* <Link to="/inbox">
                   Check your inbox
-                </Link>
+                </Link> */}
                 <button onClick={logout}>LogOut</button>
               </div>
               </div>
